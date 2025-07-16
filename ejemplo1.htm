@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>ejemplo1</title>
+</head>
+<body>
+    <textarea name="resultado" id="resultado"></textarea>
+    <input type="button" id="obtenerTexto" name="obtenerTexto" value="obtenerTexto">
+    <input type="button" id="obtenerTextoConQueryString" name="obtenerTextoConQueryString" value="obtenerTextoConQueryString">
+    <script>
+      function obtenerTexto() {
+         // Hacemos la petición
+         fetch("http://mocktarget.apigee.net/user")
+         .then(respuesta => {
+            if(respuesta.ok) { // ok es true cuando el código de respuesta está entre
+                              // 200 y 299
+               return respuesta.text(); // devolvemos el texto de la respuesta 
+                                       //  al siguiente then
+            } else {
+               window.alert("Error: " + respuesta.status); // el código de respuesta
+            }
+         }) //función a ejecutar cuando llegue la respuesta
+         .then(datos => {
+            document.getElementById("resultado").value = datos;
+         }) // función a ejecutar cuando reciba los datos del then anterior
+         .catch(error => {
+            alert(error);
+         }); // Cuando no hay internet, el sevidor no existe, ....
+      }
+
+      function obtenerTextoConQueryString() {
+         fetch("http://mocktarget.apigee.net/user?user=pepe")
+         .then(respuesta => {
+            if(respuesta.ok) {
+               return respuesta.text();
+            } else {
+               // con throw lanzamos un error que se procesará en el catch
+               throw new Error("Error en la respuesta:" + respuesta.status);
+            }
+         })
+         .then(datos => {
+            document.getElementById("resultado").value = datos;
+         })
+         .catch(error => {
+            alert(error);
+         });
+      }
+      document.getElementById("obtenerTexto")
+         .addEventListener("click", obtenerTexto);
+      
+      document.getElementById("obtenerTextoConQueryString")
+         .addEventListener("click", obtenerTextoConQueryString);
+    </script>
+</body>
+</html>
