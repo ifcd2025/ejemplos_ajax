@@ -14,9 +14,9 @@
         <div class="w-50 bg-danger-subtle m-auto p-3">
             <input type="button" name="obtener" id="obtener" value="Obtener usuarios" class="btn btn-primary mt-3 d-block m-auto">
         </div>
-        <div id="mensajes" class="d-flex justify-content-center">
+        <div id="mensajes" class="d-flex justify-content-center flex-wrap gap-3">
             <!--   Crear con JavaScript todo esto, cambiando los datos por los correspondientes 
-            <div class="rounded-3 bg-warning-subtle p-3 my-3 w-50 border border-1 border-black">
+            <div class="rounded-3 bg-warning-subtle p-3 my-3 border border-1 border-black">
                 <p>Nombre: Leanne Graham</p>
                 <p>Email: Sincere@april.biz</p>
                 <p>Calle: Kulas Light</p>
@@ -28,6 +28,61 @@
             -->
         </div> 
     </main>
+
+    <script>
+        function mostrarUsuarios(datos) {
+            const mensajes = document.getElementById("mensajes");
+            mensajes.textContent = "";            
+            // Alternativa al forEach
+            for (const usuario of datos) {
+                const div = document.createElement("div");
+                div.classList.add("rounded-3", "bg-warning-subtle", "p-3",
+                     "my-3", "border", "border-1", "border-black");
+                // Voy a reutilizar la misma variable para todos los p
+                let p = document.createElement("p");
+                p.textContent = "Nombre: " + usuario.name;
+                // Como reutilizo la variable, debo hacer el appendChild ahora
+                div.appendChild(p);
+                p = document.createElement("p");
+                p.textContent = "Email: " + usuario.email;
+                div.appendChild(p);
+                p = document.createElement("p");
+                p.textContent = "Calle: " + usuario.address.street;
+                div.appendChild(p);
+                p = document.createElement("p");
+                p.textContent = "Ciudad: " + usuario.address.city;
+                div.appendChild(p);
+                p = document.createElement("p");
+                p.classList.add("ms-3");
+                p.textContent = "latitud: " + usuario.address.geo.lat;
+                div.appendChild(p);
+                p = document.createElement("p");
+                p.classList.add("ms-3");
+                p.textContent = "longitud: " + usuario.address.geo.lng;
+                div.appendChild(p);
+                p = document.createElement("p");
+                p.textContent = "Compañía: " + usuario.company.name;
+                div.appendChild(p);
+                mensajes.appendChild(div);
+            }
+        }
+
+        function obtenerUsuarios() {
+            fetch("https://jsonplaceholder.typicode.com/users")
+            .then(respuesta => {
+                if (respuesta.ok) {
+                    return respuesta.json();
+                } else {
+                    throw new Error(respuesta.status);
+                }
+            })
+            .then(mostrarUsuarios)
+            .catch(error => alert(error));
+        }
+
+        document.getElementById("obtener")
+            .addEventListener("click", obtenerUsuarios);
+    </script>
 </body>
 </html>
 
