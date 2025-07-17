@@ -1,32 +1,82 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ejercicio tráfico</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 </head>
+
 <body>
     <header>
         <h1 class="text-center">Tráfico Vigo</h1>
     </header>
     <main>
         <div class="w-50 bg-info m-auto p-3">
-            <input type="button" name="obtener" id="obtener" value="Obtener avisos" class="btn btn-success mt-3 d-block m-auto">
+            <input type="button" name="obtener" id="obtener" value="Obtener avisos"
+                class="btn btn-success mt-3 d-block m-auto">
         </div>
-        <div id="avisos" class="justify-content-center w-50 m-auto my-4">
-            <!-- elemento a clonar que tiene la clase d-none para que esté oculto -->
-           <section class="aviso" class="bg-success-subtle shadow border border-1 border-black d-none">
-                <h2 class="bg-white p-2">Pechada ao tráfico a rúa GRANADA(PASEO) Nº 2</h2>
-                <p class="ps-2 m-0">Fecha inicio: 02-07-2025</p>
-                <p class="ps-2 m-0">Fecha fin: 31-07-2025</p>
-                <p class="p-2">Poñemos en coñecemento do público en xeral que por mor da obra de humanización do paseo de Granada, a realizar pola empresa Civis Global Sl , estará pechada ao tráfico a rúa GRANADA(PASEO) Nº 2 (VIGO) , con acceso exclusivo para garaxes, servizo público e carga descarga, dende o 2 de xullo de 2025 ás 10:00 horas e por un período aproximado dun mes. Acceso ao parquing de funcionarios dende a rúa Pracer. Desvío por Camelias, Romil, Cachamuíña, Ronda Don Bosco, Pracer. \n\tSolicítase a máxima colaboración cidadá.</p>
-                <a href="https://maps.google.com/?q=42.2361854241631,-8.72630530019664" class="d-block text-center pb-3">ver en mapa</a>
-           </section>
-        </div> 
+        <div id="avisos" class="d-flex gap-2 flex-wrap justify-content-center w-50 m-auto my-4">
+
+        </div>
+
+        <!-- elemento a clonar que tiene la clase d-none para que esté oculto -->
+        <section class="aviso bg-success-subtle shadow border border-1 border-black d-none">
+            <h2 class="bg-white p-2">Pechada ao tráfico a rúa GRANADA(PASEO) Nº 2</h2>
+            <p class="ps-2 m-0">Fecha inicio: 02-07-2025</p>
+            <p class="ps-2 m-0">Fecha fin: 31-07-2025</p>
+            <p class="p-2">Poñemos en coñecemento do público en xeral que por mor da obra de humanización do paseo de
+                Granada, a realizar pola empresa Civis Global Sl , estará pechada ao tráfico a rúa GRANADA(PASEO) Nº 2
+                (VIGO) , con acceso exclusivo para garaxes, servizo público e carga descarga, dende o 2 de xullo de 2025
+                ás 10:00 horas e por un período aproximado dun mes. Acceso ao parquing de funcionarios dende a rúa
+                Pracer. Desvío por Camelias, Romil, Cachamuíña, Ronda Don Bosco, Pracer. \n\tSolicítase a máxima
+                colaboración cidadá.</p>
+            <a href="https://maps.google.com/?q=42.2361854241631,-8.72630530019664" class="d-block text-center pb-3">ver
+                en mapa</a>
+        </section>
     </main>
+    <script>
+        function mostrarAvisos(datos) {
+            const avisos = document.getElementById("avisos");
+            avisos.textContent = "";
+            datos.forEach(aviso => {
+                // con true se clona también el contenido del elemento
+                const clon = document.querySelector(".aviso").cloneNode(true);
+                // Como el original está oculto, mostramos los clones quitándoles
+                // la clase d-none de bootstrap
+                clon.classList.remove("d-none");
+                clon.querySelector("h2").textContent = aviso.titulo;
+                clon.querySelector("p:first-of-type").textContent 
+                    = "Fecha inicial: " + aviso.data_inicio;
+                clon.querySelector("p:nth-of-type(2)").textContent 
+                    = "Fecha fin: " + aviso.data_fin;                    
+                clon.querySelector("p:nth-of-type(3)").textContent 
+                    =  aviso.texto; 
+                avisos.appendChild(clon);
+            }
+            );
+        }
+
+        function obtenerAvisos() {
+            fetch("https://datos.vigo.org/data/trafico/avisos-trafico-gl.json")
+                .then(respuesta => {
+                    if (respuesta.ok) {
+                        return respuesta.json();
+                    } else {
+                        throw new Error(respuesta.status);
+                    }
+                })
+                .then(mostrarAvisos)
+            // .catch(error => alert(error));
+        }
+
+
+        document.getElementById("obtener")
+            .addEventListener("click", obtenerAvisos);
+    </script>
+
 </body>
+
 </html>
-
-
-  
