@@ -125,6 +125,32 @@
             alert(error);
          }); 
       }
+
+      function obtenerRespuesta(respuesta) {
+         if(respuesta.ok) {
+               return respuesta.json();
+         } else {
+            throw new Error("Error en la respuesta:" + respuesta.status);
+         }
+      }
+
+      function procesarError(error) {
+         alert(error);
+      }
+
+      function procesarDatos(datos) {
+         const img = document.createElement("img");
+         img.src = datos.message;
+         document.body.appendChild(img);
+      }
+      /* Ejemplo sin usar funciones arrow o anónimas */
+      function obtenerImagenPerro2() {
+         fetch("https://dog.ceo/api/breeds/image/random")
+         .then(obtenerRespuesta)
+         .then(procesarDatos)
+         .catch(procesarError); 
+      }
+
       document.getElementById("obtenerTexto")
          .addEventListener("click", obtenerTexto);
       
