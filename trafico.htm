@@ -54,7 +54,7 @@
                     = "Fecha fin: " + aviso.data_fin;                    
                 clon.querySelector("p:nth-of-type(3)").textContent 
                     =  aviso.texto; 
-                clon.querySelector("a").src= `https://maps.google.com/?q=${aviso.lat},${aviso.lon}`;
+                clon.querySelector("a").href= `https://maps.google.com/?q=${aviso.lat},${aviso.lon}`;
                 avisos.appendChild(clon);
             }
             );
