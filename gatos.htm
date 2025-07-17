@@ -14,5 +14,28 @@
         <img src="gato.jpg" alt="" id="foto" class="w-25 d-block m-auto rounded-circle shadow border-4 border-black border">
         <input type="button" name="obtener" id="obtener" value="Obtener foto" class="btn btn-primary mt-3">
     </main>
+
+        <script>
+        function obtenerGato() {
+            fetch("https://api.thecatapi.com/v1/images/search")
+            .then(respuesta => {
+                if(respuesta.ok) {
+                    return respuesta.json();
+                } else {
+                    throw new Error(respuesta.status);
+                }
+            })
+            .then(datos => {
+               const img = document.getElementById("foto");
+               // Esta API, aunque solo devuelve una foto, viene en un array
+               // del que nos interesa el primer y único elemento (el cero)
+               img.src = datos[0].url;
+            })
+            .catch(error => alert(error));
+        }
+
+        document.getElementById("obtener")
+            .addEventListener("click", obtenerGato);   
+    </script> 
 </body>
 </html>

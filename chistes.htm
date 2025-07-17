@@ -14,5 +14,32 @@
         <p id="chiste" class="border border-1 alert alert-primary w-50 m-auto"></p>
         <input type="button" name="obtener" id="obtener" value="Obtener chiste" class="btn btn-primary mt-3">
     </main>
+        <script>
+        function obtenerChiste() {
+            fetch("https://v2.jokeapi.dev/joke/Any?lang=es")
+            .then(respuesta => {
+                if(respuesta.ok) {
+                    return respuesta.json();
+                } else {
+                    throw new Error(respuesta.status);
+                }
+            })
+            .then(datos => {
+                const p = document.getElementById("chiste");
+                // Los chistes pueden venir con setup y delivery o joke
+                // Una manera de comprobarlo es ver si uno de ellos tiene
+                // el valor undefined
+                if(datos.joke == undefined) {
+                    p.textContent = datos.setup + " " + datos.delivery;
+                } else {
+                    p.textContent = datos.joke;
+                }
+            })
+            .catch(error => alert(error));
+        }
+
+        document.getElementById("obtener")
+            .addEventListener("click", obtenerChiste);
+    </script>
 </body>
 </html>

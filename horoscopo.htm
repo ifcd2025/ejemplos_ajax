@@ -16,17 +16,17 @@
             <label for="signo">Signo</label>
             <select name="signo" id="signo">
                 <option value="aries">Aries</option>
-                <option value="tauro">Tauro</option>
-                <option value="geminis">Géminis</option>
+                <option value="taurus">Tauro</option>
+                <option value="gemini">Géminis</option>
                 <option value="cancer">Cáncer</option>
                 <option value="leo">Leo</option>
                 <option value="virgo">Virgo</option>
                 <option value="libra">Libra</option>
-                <option value="escorpio">Escorpio</option>
-                <option value="sagitario">Sagitario</option>
-                <option value="capricornio">Capricornio</option>
-                <option value="acuario">Acuario</option>
-                <option value="piscis">Piscis</option>
+                <option value="scorpio">Escorpio</option>
+                <option value="sagitarius">Sagitario</option>
+                <option value="capricorn">Capricornio</option>
+                <option value="aquarius">Acuario</option>
+                <option value="pisces">Piscis</option>
             </select>
             <input type="button" name="obtener" id="obtener" value="Obtener horóscopo" class="btn btn-primary mt-3 d-block m-auto">
             <div id="horoscopo">
@@ -35,6 +35,27 @@
             </div>
         </div>
     </main>
+        <script>
+        function obtenerHoroscopo() {
+            const signo = document.getElementById("signo").value;
+            fetch(`https://horoscope-app-api.vercel.app/api/v1/get-horoscope/daily?sign=${signo}&day=TODAY`)
+            .then(respuesta => {
+                if(respuesta.ok) {
+                    return respuesta.json();
+                } else {
+                    throw new Error(respuesta.status);
+                }
+            })
+            .then(datos => {
+               const prediccion = document.getElementById("prediccion");
+               prediccion.value = datos.data.horoscope_data;
+            })
+            .catch(error => alert(error));
+        }
+
+        document.getElementById("obtener")
+            .addEventListener("click", obtenerHoroscopo);   
+    </script>     
 </body>
 </html>
 

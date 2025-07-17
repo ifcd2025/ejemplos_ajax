@@ -63,6 +63,14 @@
                 p = document.createElement("p");
                 p.textContent = "Compañía: " + usuario.company.name;
                 div.appendChild(p);
+                // Añadimos algo que no pedía el ejercio:
+                // Un enlace a google maps
+                const a = document.createElement("a");
+                div.appendChild(a);
+                a.href = "https://www.google.com/maps/place/" + 
+                    usuario.address.geo.lat + "," + usuario.address.geo.lng;
+                //a.href = `https://www.google.com/maps/place/${usuario.address.geo.lat},${usuario.address.geo.lng}`;
+                a.textContent = "ver mapa";
                 mensajes.appendChild(div);
             }
         }
