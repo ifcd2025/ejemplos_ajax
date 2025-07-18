@@ -18,6 +18,7 @@
     <main>
         <div class="w-50 bg-info m-auto p-3">
             <input type="button" name="obtener" id="obtener" value="Obtener recetas" class="btn btn-success mt-3 d-block m-auto">
+            <img src="carga.gif" alt="" id="carga" class="m-auto my-2 d-none">
         </div>
         <div id="recetas" class="justify-content-center d-flex flex-wrap gap-3">
             <!--   Crear con JavaScript todo esto, cambiando los datos por los correspondientes
@@ -45,6 +46,78 @@
             -->
         </div> 
     </main>
+    <script>
+        function mostrarRecetas(datos) {
+            const recetas = document.getElementById("recetas");
+            recetas.textContent = "";
+            //for(const receta of datos.recipes) {
+            datos.recipes.forEach(receta => {
+                const section = document.createElement("section");
+                recetas.appendChild(section);
+                // split parte una cadena por el separador indicado, devolviendo un array con las partes
+                // add no admite un array, si no parámetros por separado (todos los que se quieran)
+                // con ... se devuelve los elementos del array como valores separados
+                // Se conoce como operador spread
+                section.classList.add(..."rounded-3 bg-warning p-3 my-3 border-1 border-black".split(" "));
+                section.style.backgroundImage = `url(${receta.image})`;
+                section.style.backgroundSize = "cover";
+
+                const h2 = document.createElement("h2");
+                section.appendChild(h2);
+                h2.textContent = receta.name;
+                h2.classList.add("alert", "alert-warning");
+                let p = document.createElement("p");
+                section.appendChild(p);
+                p.classList.add("fw-bold", "h5", "p-2");
+                p.textContent = "Ingredientes";
+                let ul = document.createElement("ul");
+                section.appendChild(ul);
+                for(const ing of receta.ingredients) {
+                    const li = document.createElement("li");
+                    ul.appendChild(li);
+                    //ing sin .algo ya que los elementos del array son solo textos, no objetos
+                    li.textContent = ing;
+                }
+                p = document.createElement("p");
+                section.appendChild(p);
+                p.classList.add("fw-bold", "h5", "p-2");
+                p.textContent = "Instrucciones";
+                ul = document.createElement("ul");
+                section.appendChild(ul);
+                for(const ing of receta.instructions) {
+                    const li = document.createElement("li");
+                    ul.appendChild(li);
+                    //ing sin .algo ya que los elementos del array son solo textos, no objetos
+                    li.textContent = ing;
+                }
+            });
+        }
+
+        function obtenerRecetas() {
+            //Desactivamos el botón hasta que llegue la respuesta
+            document.getElementById("obtener").disabled = true;
+            // mostramos la imagen de carga
+            document.getElementById("carga").classList.remove("d-none");
+            fetch("https://dummyjson.com/recipes?delay=3000")
+            .then(respuesta => {
+                if (respuesta.ok) {
+                    return respuesta.json();
+                } else {
+                    throw new Error(respuesta.status);
+                }
+            })
+            .then(mostrarRecetas)
+            .catch(error => alert(error))
+            // El finally se ejecuta al final, haya ido todo bien o mal
+            .finally( () => {
+                document.getElementById("obtener").disabled = false;
+                document.getElementById("carga").classList.add("d-none");
+            });
+        }
+
+        document.getElementById("obtener")
+            .addEventListener("click", obtenerRecetas);
+    </script>
 </body>
 </html>
 
